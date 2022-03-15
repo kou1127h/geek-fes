@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useState } from "react";
-import { Button, StyleSheet, Text, View, FlatList } from "react-native";
+import { Button, StyleSheet, Text, View, FlatList, Share } from "react-native";
 
 const renderItem = ({ item, index }: { item: number; index: number }) => (
   <Text key={index} style={styles.normalText}>
@@ -23,6 +23,17 @@ export default function App() {
     setRoundCount([]);
     setCount(0);
   }, []);
+
+  const openShareSheet = useCallback(() => {
+    if (roundCount.length !== 0) {
+      Share.share({
+        message: `ゴルフしてます！今のスコアは${roundCount.reduce(
+          (prev, curr) => prev + curr,
+          0
+        )}`,
+      });
+    }
+  }, [roundCount]);
   return (
     <View style={styles.container}>
       <FlatList
@@ -40,6 +51,7 @@ export default function App() {
 
           <Button title="reset all" onPress={handlePressResetButton} />
         </View>
+        <Button title="share" onPress={openShareSheet}></Button>
       </View>
       <StatusBar style="auto" animated />
     </View>
