@@ -1,6 +1,12 @@
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View, FlatList } from "react-native";
+
+const renderItem = ({ item, index }: { item: number; index: number }) => (
+  <Text key={index} style={styles.normalText}>
+    {index + 1}: {item}{" "}
+  </Text>
+);
 
 export default function App() {
   const [count, setCount] = useState(0);
@@ -19,21 +25,22 @@ export default function App() {
   }, []);
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection: "row" }}>
-        {
-          // ほんとはFlatListを使いたい
-          roundCount.map((val, index) => (
-            <Text key={index}>
-              {index + 1}: {val}{" "}
-            </Text>
-          ))
-        }
-      </View>
-      <Text>{count}</Text>
-      <Button title="+1" onPress={() => setCount(count + 1)} />
-      <Button title="end round" onPress={handlePressEndButton} />
+      <FlatList
+        data={roundCount}
+        renderItem={renderItem}
+        keyExtractor={(_item, index) => `${index}`}
+        horizontal
+        contentContainerStyle={styles.holeListContainer}
+      />
+      <View style={{ flex: 1 }}>
+        <Text style={styles.normalText}>現在{count}打</Text>
+        <View style={styles.buttonContainer}>
+          <Button title="+1" onPress={() => setCount(count + 1)} />
+          <Button title="end this hole" onPress={handlePressEndButton} />
 
-      <Button title="reset all" onPress={handlePressResetButton} />
+          <Button title="reset all" onPress={handlePressResetButton} />
+        </View>
+      </View>
       <StatusBar style="auto" animated />
     </View>
   );
@@ -45,5 +52,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  normalText: {
+    fontSize: 20,
+    alignSelf: "center",
+    marginBottom: 10,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+  },
+  holeListContainer: {
+    flex: 1,
+    alignSelf: "flex-end",
+    justifyContent: "center",
+    marginBottom: 10,
   },
 });
