@@ -17,7 +17,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tapgo.geek-fes"
     },
     "android": {
       "adaptiveIcon": {
